@@ -1,121 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Remove duplicate Chart.js -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'">
   <meta name="description" content="Sudan | Displacement Tracking Matrix-Returnees Flow" />
   
   <!-- External CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="./css/styles.css">
 
   <!-- External JS -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
-  <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
-  <script src="./src/CanvasFlowmapLayer.js"></script>
-  <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
- 
 </head>
 
 <body>
    
-      <!-- Dashboard Cards Container -->
-      <div class="dashboard-cards">
-        <!-- Card 1: Internally Displaced Persons -->
-        <div class="dashboard-card" style="--card-color: #2A81CB;">
-          <div class="card-icon">
-            <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon-img">
-          </div>
-          <h3>Internally Displaced</h3>
-          <div class="value">11,301,340</div>
-          <div class="change negative">
-            <i class="fas fa-arrow-down"></i> 1.7% since last update
-          </div>
-          <div class="card-footer">Nationwide</div>
-        </div>
-
-        <!-- Card 2: Returnees -->
-        <div class="dashboard-card" style="--card-color: #5CB85C;">
-          <div class="card-icon">
-            <img src="./data/Returnees.png" alt="IDP Icon" class="card-icon-img">
-          </div>
-          <h3>Returnees</h3>
-          <div class="value">396,738</div>
-          <div class="change positive">
-            <i class="fas fa-arrow-up"></i> 0.0% since last update
-          </div>
-          <div class="card-footer">Nationwide</div>
-        </div>
-
-        <!-- Card 3: Crossing Border -->
-        <div class="dashboard-card" style="--card-color: #F0AD4E;">
-          <div class="card-icon">
-            <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">
-          </div>
-          <h3>Crossing Border</h3>
-          <div class="value">3,934,086</div>
-          <div class="change positive">
-            <i class="fas fa-arrow-up"></i> 0.8% since last update
-          </div>
-          <div class="card-footer">Neighboring countries</div>
-        </div>
-
-        <!-- Card 4: Migrants Affected -->
-        <div class="dashboard-card" style="--card-color: #D9534F;">
-          <div class="card-icon">
-            <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">  
-          </div>
-          <h3>Migrants Affected</h3>
-          <div class="value">400,000</div>
-          <div class="change negative">
-            <i class="fas fa-arrow-down"></i> 2.1% since last update
-          </div>
-          <div class="card-footer">Migrants </div>
-        </div>
-
-        <!-- Card 5: Locations Covered -->
-        <div class="dashboard-card" style="--card-color: #5BC0DE;">
-          <div class="card-icon">
-            <img src="./data/Location.png" alt="IDP Icon" class="card-icon-img">  
-          </div>
-          <h3>Locations Covered</h3>
-          <div class="value">10,285</div>
-          <div class="change positive">
-            <i class="fas fa-arrow-up"></i> 1.2% since last update
-          </div>
-          <div class="card-footer">Across Sudan</div>
-        </div>
+  <!-- Dashboard Cards Container -->
+  <div class="dashboard-cards">
+    <!-- Card 1: Internally Displaced Persons -->
+    <div class="dashboard-card" style="--card-color: #2A81CB;">
+      <div class="card-icon">
+        <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon-img">
       </div>
+      <h3>Internally Displaced</h3>
+      <div class="value">11,301,340</div>
+      <div class="change negative">
+        <i class="fas fa-arrow-down"></i> 1.7% since last update
+      </div>
+      <div class="card-footer">Nationwide</div>
     </div>
- 
-<!-- Heatmap Section -->
-<div class="frame-container">
-  <div class="map-container">
-    <div id="heatmapChart" style="height: 400px;"></div>
-    <div id="heatmap-controls">
-      <button id="heatmap-play-button" class="heatmap-control-button">▶ Play</button>
-      <input type="range" id="heatmap-slider" min="0" max="19" value="0" step="1" style="width: 70%; margin: 0 15px;">
-      <span id="heatmap-time-display" style="font-weight: bold; color: #418FDE;">Aug-2023</span>
-      <button id="heatmap-export-button" class="heatmap-control-button">Export as Image</button>
+
+    <!-- Card 2: Returnees -->
+    <div class="dashboard-card" style="--card-color: #5CB85C;">
+      <div class="card-icon">
+        <img src="./data/Returnees.png" alt="IDP Icon" class="card-icon-img">
+      </div>
+      <h3>Returnees</h3>
+      <div class="value">396,738</div>
+      <div class="change positive">
+        <i class="fas fa-arrow-up"></i> 0.0% since last update
+      </div>
+      <div class="card-footer">Nationwide</div>
+    </div>
+
+    <!-- Card 3: Crossing Border -->
+    <div class="dashboard-card" style="--card-color: #F0AD4E;">
+      <div class="card-icon">
+        <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">
+      </div>
+      <h3>Crossing Border</h3>
+      <div class="value">3,934,086</div>
+      <div class="change positive">
+        <i class="fas fa-arrow-up"></i> 0.8% since last update
+      </div>
+      <div class="card-footer">Neighboring countries</div>
+    </div>
+
+    <!-- Card 4: Migrants Affected -->
+    <div class="dashboard-card" style="--card-color: #D9534F;">
+      <div class="card-icon">
+        <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">  
+      </div>
+      <h3>Migrants Affected</h3>
+      <div class="value">400,000</div>
+      <div class="change negative">
+        <i class="fas fa-arrow-down"></i> 2.1% since last update
+      </div>
+      <div class="card-footer">Migrants </div>
+    </div>
+
+    <!-- Card 5: Locations Covered -->
+    <div class="dashboard-card" style="--card-color: #5BC0DE;">
+      <div class="card-icon">
+        <img src="./data/Location.png" alt="IDP Icon" class="card-icon-img">  
+      </div>
+      <h3>Locations Covered</h3>
+      <div class="value">10,285</div>
+      <div class="change positive">
+        <i class="fas fa-arrow-up"></i> 1.2% since last update
+      </div>
+      <div class="card-footer">Across Sudan</div>
     </div>
   </div>
-</div>
+
+  <!-- Improved Heatmap Section -->
+  <div class="frame-container">
+    <div class="map-container">
+      <div id="heatmapChart" style="height: 500px;"></div>
+      <div id="heatmap-controls" style="margin-top: 20px; display: flex; align-items: center; justify-content: center; padding: 10px; background: #f5f5f5; border-radius: 5px;">
+        <button id="heatmap-play-button" class="heatmap-control-button" style="padding: 8px 15px; background: #418FDE; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+          <i class="fas fa-play"></i> Play Timeline
+        </button>
+        <input type="range" id="heatmap-slider" min="0" max="19" value="0" step="1" style="flex-grow: 1; margin: 0 15px; max-width: 500px;">
+        <span id="heatmap-time-display" style="font-weight: bold; color: #418FDE; min-width: 80px; text-align: center;">Aug-2023</span>
+        <div style="display: flex; margin-left: 15px;">
+          <button id="heatmap-speed-slower" class="heatmap-control-button" style="padding: 5px 10px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px 0 0 4px; cursor: pointer;">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button id="heatmap-speed-faster" class="heatmap-control-button" style="padding: 5px 10px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 0 4px 4px 0; cursor: pointer; border-left: none;">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <button id="heatmap-export-button" class="heatmap-control-button" style="padding: 8px 15px; background: #5CB85C; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 15px;">
+          <i class="fas fa-download"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
- 
+    // Sample Heatmap Data - Replace with your actual data
+    const heatmapData = {
+      dates: ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 'Jan-2024', 'Feb-2024', 'Mar-2024', 'Apr-2024', 'May-2024'],
+      values: [
+        // Sample data for each time period
+        [/* your data points */],
+        [/* your data points */],
+        // ... more time periods
+      ]
+    };
 
- window.addEventListener('load', function() {
-    document.getElementById('tall-element').style.height = '200px';
-});
- 
+    // Initialize Heatmap
+    const heatmapElement = document.getElementById('heatmapChart');
+    const timeDisplay = document.getElementById('heatmap-time-display');
+    const slider = document.getElementById('heatmap-slider');
+    const playButton = document.getElementById('heatmap-play-button');
+    let isPlaying = false;
+    let playInterval;
+    let playSpeed = 1000; // Default speed in ms
+
+    // Initialize Plotly Heatmap
+    function initHeatmap() {
+      const data = [{
+        z: heatmapData.values[0],
+        type: 'heatmap',
+        colorscale: 'Viridis'
+      }];
+      
+      const layout = {
+        title: 'Displacement Heatmap Over Time',
+        xaxis: { title: 'Longitude' },
+        yaxis: { title: 'Latitude' }
+      };
+      
+      Plotly.newPlot(heatmapElement, data, layout);
+    }
+
+    // Update Heatmap for current time period
+    function updateHeatmap(periodIndex) {
+      const currentData = {
+        z: [heatmapData.values[periodIndex]],
+        type: 'heatmap',
+        colorscale: 'Viridis'
+      };
+      
+      Plotly.react(heatmapElement, [currentData], {
+        title: `Displacement Heatmap - ${heatmapData.dates[periodIndex]}`
+      });
+      
+      timeDisplay.textContent = heatmapData.dates[periodIndex];
+      slider.value = periodIndex;
+    }
+
+    // Play/Pause timeline animation
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      
+      if (isPlaying) {
+        playButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        playInterval = setInterval(() => {
+          const nextPeriod = (parseInt(slider.value) + 1) % heatmapData.dates.length;
+          updateHeatmap(nextPeriod);
+        }, playSpeed);
+      } else {
+        playButton.innerHTML = '<i class="fas fa-play"></i> Play Timeline';
+        clearInterval(playInterval);
+      }
+    }
+
+    // Event Listeners
+    slider.addEventListener('input', (e) => {
+      if (isPlaying) togglePlay();
+      updateHeatmap(parseInt(e.target.value));
+    });
+
+    playButton.addEventListener('click', togglePlay);
+
+    document.getElementById('heatmap-speed-slower').addEventListener('click', () => {
+      playSpeed = Math.min(3000, playSpeed + 500);
+    });
+
+    document.getElementById('heatmap-speed-faster').addEventListener('click', () => {
+      playSpeed = Math.max(200, playSpeed - 500);
+    });
+
+    document.getElementById('heatmap-export-button').addEventListener('click', () => {
+      Plotly.downloadImage(heatmapElement, {
+        format: 'png',
+        width: 800,
+        height: 600,
+        filename: `heatmap-${timeDisplay.textContent}`
+      });
+    });
+
+    // Initialize on load
+    window.addEventListener('load', initHeatmap);
   </script>
 </body>
 </html>
- 
