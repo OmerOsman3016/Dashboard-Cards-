@@ -22,89 +22,257 @@
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
  
+  <style>
+    /* Add styles for the timeline section */
+    .timeline-container {
+      width: 95%;
+      margin: 20px auto;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .timeline-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    #timeline-chart {
+      width: 100%;
+      height: 400px;
+    }
+    
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin: 0 10px;
+    }
+    
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+      border-radius: 3px;
+    }
+  </style>
 </head>
 
 <body>
    
-      <!-- Dashboard Cards Container -->
-      <div class="dashboard-cards">
-        <!-- Card 1: Internally Displaced Persons -->
-        <div class="dashboard-card" style="--card-color: #2A81CB;">
-          <div class="card-icon">
-            <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon-img">
-          </div>
-          <h3>Internally Displaced</h3>
-          <div class="value">11,301,340</div>
-          <div class="change negative">
-            <i class="fas fa-arrow-down"></i> 1.7% since last update
-          </div>
-          <div class="card-footer">Nationwide</div>
-        </div>
+  <!-- Dashboard Cards Container -->
+  <div class="dashboard-cards">
+    <!-- Card 1: Internally Displaced Persons -->
+    <div class="dashboard-card" style="--card-color: #2A81CB;">
+      <div class="card-icon">
+        <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon-img">
+      </div>
+      <h3>Internally Displaced</h3>
+      <div class="value">11,301,340</div>
+      <div class="change negative">
+        <i class="fas fa-arrow-down"></i> 1.7% since last update
+      </div>
+      <div class="card-footer">Nationwide</div>
+    </div>
 
-        <!-- Card 2: Returnees -->
-        <div class="dashboard-card" style="--card-color: #5CB85C;">
-          <div class="card-icon">
-            <img src="./data/Returnees.png" alt="IDP Icon" class="card-icon-img">
-          </div>
-          <h3>Returnees</h3>
-          <div class="value">396,738</div>
-          <div class="change positive">
-            <i class="fas fa-arrow-up"></i> 0.0% since last update
-          </div>
-          <div class="card-footer">Nationwide</div>
-        </div>
+    <!-- Card 2: Returnees -->
+    <div class="dashboard-card" style="--card-color: #5CB85C;">
+      <div class="card-icon">
+        <img src="./data/Returnees.png" alt="IDP Icon" class="card-icon-img">
+      </div>
+      <h3>Returnees</h3>
+      <div class="value">396,738</div>
+      <div class="change positive">
+        <i class="fas fa-arrow-up"></i> 0.0% since last update
+      </div>
+      <div class="card-footer">Nationwide</div>
+    </div>
 
-        <!-- Card 3: Crossing Border -->
-        <div class="dashboard-card" style="--card-color: #F0AD4E;">
-          <div class="card-icon">
-            <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">
-          </div>
-          <h3>Crossing Border</h3>
-          <div class="value">3,934,086</div>
-          <div class="change positive">
-            <i class="fas fa-arrow-up"></i> 0.8% since last update
-          </div>
-          <div class="card-footer">Neighboring countries</div>
-        </div>
+    <!-- Card 3: Crossing Border -->
+    <div class="dashboard-card" style="--card-color: #F0AD4E;">
+      <div class="card-icon">
+        <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">
+      </div>
+      <h3>Crossing Border</h3>
+      <div class="value">3,934,086</div>
+      <div class="change positive">
+        <i class="fas fa-arrow-up"></i> 0.8% since last update
+      </div>
+      <div class="card-footer">Neighboring countries</div>
+    </div>
 
-        <!-- Card 4: Migrants Affected -->
-        <div class="dashboard-card" style="--card-color: #D9534F;">
-          <div class="card-icon">
-            <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">  
-          </div>
-          <h3>Migrants Affected</h3>
-          <div class="value">400,000</div>
-          <div class="change negative">
-            <i class="fas fa-arrow-down"></i> 2.1% since last update
-          </div>
-          <div class="card-footer">Migrants </div>
-        </div>
+    <!-- Card 4: Migrants Affected -->
+    <div class="dashboard-card" style="--card-color: #D9534F;">
+      <div class="card-icon">
+        <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">  
+      </div>
+      <h3>Migrants Affected</h3>
+      <div class="value">400,000</div>
+      <div class="change negative">
+        <i class="fas fa-arrow-down"></i> 2.1% since last update
+      </div>
+      <div class="card-footer">Migrants </div>
+    </div>
 
-        <!-- Card 5: Locations Covered -->
-        <div class="dashboard-card" style="--card-color: #5BC0DE;">
-          <div class="card-icon">
-            <img src="./data/Location.png" alt="IDP Icon" class="card-icon-img">  
-          </div>
-          <h3>Locations Covered</h3>
-          <div class="value">10,285</div>
-          <div class="change positive">
-            <i class="fas fa-arrow-up"></i> 1.2% since last update
-          </div>
-          <div class="card-footer">Across Sudan</div>
-        </div>
+    <!-- Card 5: Locations Covered -->
+    <div class="dashboard-card" style="--card-color: #5BC0DE;">
+      <div class="card-icon">
+        <img src="./data/Location.png" alt="IDP Icon" class="card-icon-img">  
+      </div>
+      <h3>Locations Covered</h3>
+      <div class="value">10,285</div>
+      <div class="change positive">
+        <i class="fas fa-arrow-up"></i> 1.2% since last update
+      </div>
+      <div class="card-footer">Across Sudan</div>
+    </div>
+  </div>
+  
+  <!-- Timeline Section -->
+  <div class="timeline-container">
+    <div class="timeline-header">
+      <div class="timeline-title">Displacement Trends Over Time</div>
+    </div>
+    <div id="timeline-chart"></div>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #2A81CB;"></div>
+        <span>Internally Displaced</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #5CB85C;"></div>
+        <span>Returnees</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #F0AD4E;"></div>
+        <span>Border Crossings</span>
       </div>
     </div>
- 
-
+  </div>
 
   <script>
- 
+    // Data for the timeline
+    const displacementData = [
+      {date: 'Apr-23', idps: 3200000, returnees: 50000, border_crossings: 800000},
+      {date: 'May-23', idps: 3450000, returnees: 75000, border_crossings: 900000},
+      {date: 'Jun-23', idps: 3800000, returnees: 100000, border_crossings: 1000000},
+      {date: 'Jul-23', idps: 4100000, returnees: 150000, border_crossings: 1100000},
+      {date: 'Aug-23', idps: 4350000, returnees: 200000, border_crossings: 1200000},
+      {date: 'Sep-23', idps: 4600000, returnees: 250000, border_crossings: 1300000},
+      {date: 'Oct-23', idps: 4900000, returnees: 300000, border_crossings: 1400000},
+      {date: 'Nov-23', idps: 5200000, returnees: 350000, border_crossings: 1500000},
+      {date: 'Dec-23', idps: 5500000, returnees: 400000, border_crossings: 1600000},
+      {date: 'Jan-24', idps: 5800000, returnees: 450000, border_crossings: 1700000},
+      {date: 'Feb-24', idps: 6100000, returnees: 500000, border_crossings: 1800000},
+      {date: 'Mar-24', idps: 6400000, returnees: 550000, border_crossings: 1900000},
+      {date: 'Apr-24', idps: 6700000, returnees: 600000, border_crossings: 2000000},
+      {date: 'May-24', idps: 7000000, returnees: 650000, border_crossings: 2100000},
+      {date: 'Jun-24', idps: 7300000, returnees: 750000, border_crossings: 2200000},
+      {date: 'Jul-24', idps: 7600000, returnees: 800000, border_crossings: 2300000},
+      {date: 'Aug-24', idps: 7900000, returnees: 850000, border_crossings: 2400000},
+      {date: 'Sep-24', idps: 8200000, returnees: 900000, border_crossings: 2500000},
+      {date: 'Oct-24', idps: 8500000, returnees: 950000, border_crossings: 2600000},
+      {date: 'Nov-24', idps: 8800000, returnees: 1000000, border_crossings: 2650000},
+      {date: 'Dec-24', idps: 9100000, returnees: 1050000, border_crossings: 2700000},
+      {date: 'Jan-25', idps: 9300000, returnees: 1150000, border_crossings: 2750000},
+      {date: 'Feb-25', idps: 9350000, returnees: 1150000, border_crossings: 2780000},
+      {date: 'Mar-25', idps: 9400000, returnees: 1200000, border_crossings: 2800000}
+    ];
 
- window.addEventListener('load', function() {
-    document.getElementById('tall-element').style.height = '200px';
-});
- 
+    // Prepare data for Plotly
+    const dates = displacementData.map(item => item.date);
+    const idps = displacementData.map(item => item.idps);
+    const returnees = displacementData.map(item => item.returnees);
+    const borderCrossings = displacementData.map(item => item.border_crossings);
+
+    // Create traces for each data series
+    const trace1 = {
+      x: dates,
+      y: idps,
+      name: 'Internally Displaced',
+      mode: 'lines+markers',
+      line: {color: '#2A81CB', width: 3},
+      marker: {size: 6}
+    };
+
+    const trace2 = {
+      x: dates,
+      y: returnees,
+      name: 'Returnees',
+      mode: 'lines+markers',
+      line: {color: '#5CB85C', width: 3},
+      marker: {size: 6}
+    };
+
+    const trace3 = {
+      x: dates,
+      y: borderCrossings,
+      name: 'Border Crossings',
+      mode: 'lines+markers',
+      line: {color: '#F0AD4E', width: 3},
+      marker: {size: 6}
+    };
+
+    const data = [trace1, trace2, trace3];
+
+    // Layout configuration
+    const layout = {
+      title: '',
+      xaxis: {
+        title: 'Month',
+        tickangle: -45
+      },
+      yaxis: {
+        title: 'Number of People',
+        tickformat: ',.0f'
+      },
+      hovermode: 'closest',
+      showlegend: false,
+      margin: {l: 60, r: 30, t: 30, b: 80},
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    // Configuration options
+    const config = {
+      responsive: true,
+      displayModeBar: true,
+      scrollZoom: true
+    };
+
+    // Create the chart when the page loads
+    window.addEventListener('load', function() {
+      document.getElementById('tall-element').style.height = '200px';
+      
+      // Create the timeline chart
+      Plotly.newPlot('timeline-chart', data, layout, config);
+      
+      // Add hover effects
+      document.getElementById('timeline-chart').on('plotly_hover', function(data) {
+        const point = data.points[0];
+        console.log('Hovered over:', point.data.name, '=', point.y);
+      });
+      
+      // Add click effects
+      document.getElementById('timeline-chart').on('plotly_click', function(data) {
+        const point = data.points[0];
+        console.log('Clicked on:', point.data.name, '=', point.y, 'at', point.x);
+      });
+    });
   </script>
 </body>
 </html>
- 
