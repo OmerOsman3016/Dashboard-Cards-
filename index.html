@@ -407,26 +407,7 @@
       }
     };
 
-    // Configuration options
-    const config = {
-      responsive: true,
-      displayModeBar: true,
-      scrollZoom: true,
-      displaylogo: false,
-      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'],
-      modeBarButtonsToAdd: [{
-        name: 'Download as PNG',
-        icon: Plotly.Icons.camera,
-        click: function(gd) {
-          Plotly.downloadImage(gd, {
-            format: 'png',
-            width: 1200,
-            height: 600,
-            filename: 'sudan-displacement-trends'
-          });
-        }
-      }]
-    };
+   
 
     // Create the chart when the page loads
     document.addEventListener('DOMContentLoaded', function() {
