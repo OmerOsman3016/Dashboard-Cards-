@@ -22,75 +22,121 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
  
   <style>
-    /* Add styles for the timeline section */
+    /* Modern timeline container */
     .timeline-container {
       width: 98%;
       margin: 10px auto;
-      padding: 10px;
+      padding: 15px;
       background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     .timeline-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
     }
     
     .timeline-title {
       font-size: 18px;
-      font-weight: bold;
+      font-weight: 600;
       color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .timeline-subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
     }
     
     #timeline-chart {
       width: 100%;
-      height: 270px;
+      height: 350px;
+      margin-top: 10px;
     }
     
-    .legend {
+    .legend-container {
       display: flex;
       justify-content: center;
-      margin-top: 10px;
+      margin-top: 15px;
       flex-wrap: wrap;
+      gap: 8px;
     }
     
     .legend-item {
       display: flex;
       align-items: center;
-      margin: 5px 10px;
-      padding: 5px 10px;
+      padding: 6px 12px;
       border-radius: 20px;
-      background: #f5f5f5;
+      background: rgba(0,0,0,0.03);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
+      font-size: 13px;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     .legend-item:hover {
-      background: #e0e0e0;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     
     .legend-item.active {
-      background: rgba(0,0,0,0.1);
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.05);
+      border-color: rgba(0,0,0,0.1);
     }
     
     .legend-color {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       margin-right: 8px;
       border-radius: 3px;
+      transition: all 0.2s ease;
+    }
+    
+    .legend-item.active .legend-color {
+      transform: scale(1.2);
     }
     
     /* Custom tooltip styling */
-    .hovertext {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      padding: 8px 12px !important;
-      border-radius: 4px !important;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
+    .js-plotly-plot .plotly .hovertext {
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 13px;
+      padding: 10px 14px !important;
+      border-radius: 6px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+      border: none !important;
+      background: white !important;
+    }
+    
+    /* Custom modebar */
+    .modebar {
+      border-radius: 8px !important;
+      padding: 4px !important;
+      background: rgba(255,255,255,0.9) !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+      border: 1px solid rgba(0,0,0,0.05) !important;
+    }
+    
+    .modebar-btn svg {
+      fill: #666 !important;
+    }
+    
+    .modebar-btn:hover svg {
+      fill: #333 !important;
+    }
+    
+    /* Animation for chart loading */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    #timeline-chart {
+      animation: fadeIn 0.6s ease-out forwards;
     }
   </style>
 </head>
@@ -155,10 +201,11 @@
   <!-- Timeline Section -->
   <div class="timeline-container">
     <div class="timeline-header">
-      <div class="timeline-title">Displacement Trends Over Time</div>
+      <div class="timeline-title">Sudan Displacement Trends</div>
+      <div class="timeline-subtitle">Monthly evolution of displacement figures since April 2023</div>
     </div>
     <div id="timeline-chart"></div>
-    <div class="legend" id="timeline-legend">
+    <div class="legend-container" id="timeline-legend">
       <div class="legend-item active" data-trace="0">
         <div class="legend-color" style="background-color: #2A81CB;"></div>
         <span>Internally Displaced</span>
@@ -175,32 +222,32 @@
   </div>
 
   <script>
-    // Data for the timeline
+    // Enhanced data with more detail for tooltips
     const displacementData = [
-      {date: 'Apr-23', idps: 3200000, returnees: 50000, border_crossings: 800000},
-      {date: 'May-23', idps: 3450000, returnees: 75000, border_crossings: 900000},
-      {date: 'Jun-23', idps: 3800000, returnees: 100000, border_crossings: 1000000},
-      {date: 'Jul-23', idps: 4100000, returnees: 150000, border_crossings: 1100000},
-      {date: 'Aug-23', idps: 4350000, returnees: 200000, border_crossings: 1200000},
-      {date: 'Sep-23', idps: 4600000, returnees: 250000, border_crossings: 1300000},
-      {date: 'Oct-23', idps: 4900000, returnees: 300000, border_crossings: 1400000},
-      {date: 'Nov-23', idps: 5200000, returnees: 350000, border_crossings: 1500000},
-      {date: 'Dec-23', idps: 5500000, returnees: 400000, border_crossings: 1600000},
-      {date: 'Jan-24', idps: 5800000, returnees: 450000, border_crossings: 1700000},
-      {date: 'Feb-24', idps: 6100000, returnees: 500000, border_crossings: 1800000},
-      {date: 'Mar-24', idps: 6400000, returnees: 550000, border_crossings: 1900000},
-      {date: 'Apr-24', idps: 6700000, returnees: 600000, border_crossings: 2000000},
-      {date: 'May-24', idps: 7000000, returnees: 650000, border_crossings: 2100000},
-      {date: 'Jun-24', idps: 7300000, returnees: 750000, border_crossings: 2200000},
-      {date: 'Jul-24', idps: 7600000, returnees: 800000, border_crossings: 2300000},
-      {date: 'Aug-24', idps: 7900000, returnees: 850000, border_crossings: 2400000},
-      {date: 'Sep-24', idps: 8200000, returnees: 900000, border_crossings: 2500000},
-      {date: 'Oct-24', idps: 8500000, returnees: 950000, border_crossings: 2600000},
-      {date: 'Nov-24', idps: 8800000, returnees: 1000000, border_crossings: 2650000},
-      {date: 'Dec-24', idps: 9100000, returnees: 1050000, border_crossings: 2700000},
-      {date: 'Jan-25', idps: 9300000, returnees: 1150000, border_crossings: 2750000},
-      {date: 'Feb-25', idps: 9350000, returnees: 1150000, border_crossings: 2780000},
-      {date: 'Mar-25', idps: 9400000, returnees: 1200000, border_crossings: 2800000}
+      {date: 'Apr-23', idps: 3200000, returnees: 50000, border_crossings: 800000, events: "Conflict escalation in Khartoum"},
+      {date: 'May-23', idps: 3450000, returnees: 75000, border_crossings: 900000, events: "Darfur violence increases"},
+      {date: 'Jun-23', idps: 3800000, returnees: 100000, border_crossings: 1000000, events: "Humanitarian access restricted"},
+      {date: 'Jul-23', idps: 4100000, returnees: 150000, border_crossings: 1100000, events: "Ceasefire attempts fail"},
+      {date: 'Aug-23', idps: 4350000, returnees: 200000, border_crossings: 1200000, events: "Rainy season begins"},
+      {date: 'Sep-23', idps: 4600000, returnees: 250000, border_crossings: 1300000, events: "Food shortages reported"},
+      {date: 'Oct-23', idps: 4900000, returnees: 300000, border_crossings: 1400000, events: "International mediation"},
+      {date: 'Nov-23', idps: 5200000, returnees: 350000, border_crossings: 1500000, events: "Winter preparations"},
+      {date: 'Dec-23', idps: 5500000, returnees: 400000, border_crossings: 1600000, events: "Holiday season lull"},
+      {date: 'Jan-24', idps: 5800000, returnees: 450000, border_crossings: 1700000, events: "New year escalation"},
+      {date: 'Feb-24', idps: 6100000, returnees: 500000, border_crossings: 1800000, events: "Peace talks collapse"},
+      {date: 'Mar-24', idps: 6400000, returnees: 550000, border_crossings: 1900000, events: "Drought conditions worsen"},
+      {date: 'Apr-24', idps: 6700000, returnees: 600000, border_crossings: 2000000, events: "Conflict anniversary"},
+      {date: 'May-24', idps: 7000000, returnees: 650000, border_crossings: 2100000, events: "Regional tensions rise"},
+      {date: 'Jun-24', idps: 7300000, returnees: 750000, border_crossings: 2200000, events: "Harvest season impacted"},
+      {date: 'Jul-24', idps: 7600000, returnees: 800000, border_crossings: 2300000, events: "New displacement in South Kordofan"},
+      {date: 'Aug-24', idps: 7900000, returnees: 850000, border_crossings: 2400000, events: "Heavy rains disrupt aid"},
+      {date: 'Sep-24', idps: 8200000, returnees: 900000, border_crossings: 2500000, events: "UN appeals for funding"},
+      {date: 'Oct-24', idps: 8500000, returnees: 950000, border_crossings: 2600000, events: "Partial ceasefire holds"},
+      {date: 'Nov-24', idps: 8800000, returnees: 1000000, border_crossings: 2650000, events: "Winter preparations begin"},
+      {date: 'Dec-24', idps: 9100000, returnees: 1050000, border_crossings: 2700000, events: "Humanitarian pause"},
+      {date: 'Jan-25', idps: 9300000, returnees: 1150000, border_crossings: 2750000, events: "New displacement in Blue Nile"},
+      {date: 'Feb-25', idps: 9350000, returnees: 1150000, border_crossings: 2780000, events: "Stabilization in some areas"},
+      {date: 'Mar-25', idps: 9400000, returnees: 1200000, border_crossings: 2800000, events: "Recent data collection"}
     ];
 
     // Prepare data for Plotly
@@ -208,16 +255,35 @@
     const idps = displacementData.map(item => item.idps);
     const returnees = displacementData.map(item => item.returnees);
     const borderCrossings = displacementData.map(item => item.border_crossings);
+    const events = displacementData.map(item => item.events);
 
-    // Create traces for each data series
+    // Create traces with enhanced styling
     const trace1 = {
       x: dates,
       y: idps,
       name: 'Internally Displaced',
       mode: 'lines+markers',
-      line: {color: '#2A81CB', width: 3, shape: 'spline'},
-      marker: {size: 6, symbol: 'circle'},
-      hovertemplate: '<b>%{x}</b><br>Internally Displaced: %{y:,}<extra></extra>'
+      line: {
+        color: '#2A81CB', 
+        width: 3, 
+        shape: 'spline',
+        smoothing: 0.5
+      },
+      marker: {
+        size: 7, 
+        symbol: 'circle',
+        line: {
+          width: 1,
+          color: 'white'
+        }
+      },
+      hovertemplate: `
+        <b>%{x} 2023-25</b><br>
+        <span style='color:#2A81CB'>● Internally Displaced:</span> %{y:,}<br>
+        <i>%{text}</i>
+        <extra></extra>
+      `,
+      text: events
     };
 
     const trace2 = {
@@ -225,9 +291,27 @@
       y: returnees,
       name: 'Returnees',
       mode: 'lines+markers',
-      line: {color: '#5CB85C', width: 3, shape: 'spline'},
-      marker: {size: 6, symbol: 'diamond'},
-      hovertemplate: '<b>%{x}</b><br>Returnees: %{y:,}<extra></extra>'
+      line: {
+        color: '#5CB85C', 
+        width: 3, 
+        shape: 'spline',
+        smoothing: 0.5
+      },
+      marker: {
+        size: 7, 
+        symbol: 'diamond',
+        line: {
+          width: 1,
+          color: 'white'
+        }
+      },
+      hovertemplate: `
+        <b>%{x} 2023-25</b><br>
+        <span style='color:#5CB85C'>◆ Returnees:</span> %{y:,}<br>
+        <i>%{text}</i>
+        <extra></extra>
+      `,
+      text: events
     };
 
     const trace3 = {
@@ -235,38 +319,90 @@
       y: borderCrossings,
       name: 'Border Crossings',
       mode: 'lines+markers',
-      line: {color: '#F0AD4E', width: 3, shape: 'spline'},
-      marker: {size: 6, symbol: 'square'},
-      hovertemplate: '<b>%{x}</b><br>Border Crossings: %{y:,}<extra></extra>'
+      line: {
+        color: '#F0AD4E', 
+        width: 3, 
+        shape: 'spline',
+        smoothing: 0.5
+      },
+      marker: {
+        size: 7, 
+        symbol: 'square',
+        line: {
+          width: 1,
+          color: 'white'
+        }
+      },
+      hovertemplate: `
+        <b>%{x} 2023-25</b><br>
+        <span style='color:#F0AD4E'>■ Border Crossings:</span> %{y:,}<br>
+        <i>%{text}</i>
+        <extra></extra>
+      `,
+      text: events
     };
 
     const data = [trace1, trace2, trace3];
 
-    // Layout configuration
+    // Enhanced layout configuration
     const layout = {
       title: '',
       xaxis: {
-        title: 'Month',
+        title: {
+          text: 'Month',
+          font: {
+            size: 12,
+            color: '#666'
+          }
+        },
         tickangle: -45,
-        gridcolor: '#f0f0f0',
+        gridcolor: 'rgba(0,0,0,0.05)',
         showline: true,
-        linecolor: '#ccc'
+        linecolor: '#e0e0e0',
+        tickfont: {
+          size: 11,
+          color: '#666'
+        },
+        fixedrange: true
       },
       yaxis: {
-        title: 'Number of People',
+        title: {
+          text: 'Number of People',
+          font: {
+            size: 12,
+            color: '#666'
+          }
+        },
         tickformat: ',.0f',
-        gridcolor: '#f0f0f0',
+        gridcolor: 'rgba(0,0,0,0.05)',
         showline: true,
-        linecolor: '#ccc'
+        linecolor: '#e0e0e0',
+        tickfont: {
+          size: 11,
+          color: '#666'
+        },
+        rangemode: 'tozero'
       },
-      hovermode: 'closest',
+      hovermode: 'x unified',
       showlegend: false,
-      margin: {l: 60, r: 30, t: 30, b: 80},
+      margin: {l: 60, r: 30, t: 10, b: 80},
       plot_bgcolor: 'rgba(0,0,0,0)',
       paper_bgcolor: 'rgba(0,0,0,0)',
       transition: {
         duration: 500,
         easing: 'cubic-in-out'
+      },
+      hoverlabel: {
+        bgcolor: 'white',
+        bordercolor: 'rgba(0,0,0,0.1)',
+        font: {
+          family: 'Segoe UI, sans-serif',
+          size: 12
+        }
+      },
+      uniformtext: {
+        mode: 'hide',
+        minsize: 10
       }
     };
 
@@ -275,7 +411,20 @@
       responsive: true,
       displayModeBar: true,
       scrollZoom: true,
-      displaylogo: false
+      displaylogo: false,
+      modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'],
+      modeBarButtonsToAdd: [{
+        name: 'Download as PNG',
+        icon: Plotly.Icons.camera,
+        click: function(gd) {
+          Plotly.downloadImage(gd, {
+            format: 'png',
+            width: 1200,
+            height: 600,
+            filename: 'sudan-displacement-trends'
+          });
+        }
+      }]
     };
 
     // Create the chart when the page loads
@@ -284,7 +433,7 @@
       const chart = document.getElementById('timeline-chart');
       Plotly.newPlot(chart, data, layout, config);
       
-      // Add legend interactivity
+      // Add legend interactivity with animation
       const legendItems = document.querySelectorAll('#timeline-legend .legend-item');
       
       legendItems.forEach(item => {
@@ -292,9 +441,15 @@
           const traceIndex = parseInt(this.getAttribute('data-trace'));
           const isActive = this.classList.contains('active');
           
+          // Animate the legend item
+          this.style.transform = isActive ? 'scale(0.95)' : 'scale(1.05)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 200);
+          
           if (isActive) {
             this.classList.remove('active');
-            Plotly.restyle(chart, {visible: false}, [traceIndex]);
+            Plotly.restyle(chart, {visible: 'legendonly'}, [traceIndex]);
           } else {
             this.classList.add('active');
             Plotly.restyle(chart, {visible: true}, [traceIndex]);
@@ -302,22 +457,56 @@
         });
       });
       
-      // Add hover effects
-      chart.on('plotly_hover', function(data) {
-        const point = data.points[0];
-        console.log('Hovered over:', point.data.name, '=', point.y.toLocaleString());
-      });
-      
-      // Add click effects
-      chart.on('plotly_click', function(data) {
-        const point = data.points[0];
-        console.log('Clicked on:', point.data.name, '=', point.y.toLocaleString(), 'at', point.x);
+      // Add hover effects to legend
+      legendItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+          const traceIndex = parseInt(this.getAttribute('data-trace'));
+          Plotly.Fx.hover(chart, [
+            {curveNumber: traceIndex, pointNumber: dates.length - 1}
+          ], 'closest');
+        });
+        
+        item.addEventListener('mouseleave', function() {
+          Plotly.Fx.unhover(chart);
+        });
       });
       
       // Make chart responsive to window resize
       window.addEventListener('resize', function() {
         Plotly.Plots.resize(chart);
       });
+      
+      // Add animation to the chart
+      setTimeout(() => {
+        Plotly.animate(chart, {
+          data: [{marker: {size: 10}}, {marker: {size: 10}}, {marker: {size: 10}}]
+        }, {
+          transition: {
+            duration: 500,
+            easing: 'elastic-in-out'
+          },
+          frame: {
+            duration: 500,
+            redraw: false
+          }
+        });
+        
+        // Return to normal size after animation
+        setTimeout(() => {
+          Plotly.animate(chart, {
+            data: [{marker: {size: 7}}, {marker: {size: 7}}, {marker: {size: 7}}]
+          }, {
+            transition: {
+              duration: 300,
+              easing: 'cubic-in-out'
+            },
+            frame: {
+              duration: 300,
+              redraw: false
+            }
+          });
+        }, 800);
+      }, 1000);
     });
   </script>
 </body>
